@@ -1,7 +1,11 @@
 const Client = require('bitcoin-core');
 
 const options = {
-    // not commited due to sensitive data
+    host: 'node_host',
+    port: 1234,
+    username: 'uname',
+    password: 'pwd',
+    "accept": "application/json",
 }
 
 interface ClientOptions {
