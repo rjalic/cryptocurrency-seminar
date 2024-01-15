@@ -1,19 +1,5 @@
 const Client = require('bitcoin-core');
-
-const options = {
-    host: 'node_host',
-    port: 1234,
-    username: 'uname',
-    password: 'pwd',
-    "accept": "application/json",
-}
-
-interface ClientOptions {
-    host: string;
-    port: number;
-    username: string;
-    password: string;
-}
+require('dotenv').config();
 
 class ClientSingleton {
     static #client;
@@ -28,7 +14,13 @@ class ClientSingleton {
 
     static #initializeClient() {
         try {
-            ClientSingleton.#client = new Client(options);
+            ClientSingleton.#client = new Client({
+                host: process.env.BLOCKCHAIN_HOST,
+                port: process.env.BLOCKCHAIN_PORT,
+                username: process.env.BLOCKCHAIN_USER,
+                password: process.env.BLOCKCHAIN_PASSWORD,
+                "accept": "application/json",
+            });
             console.info('Bitcoin client initialized.');
         } catch (err) {
             console.error('Error while initializing Bitcoin client.', err);

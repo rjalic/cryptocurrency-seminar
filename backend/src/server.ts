@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import cors from 'cors';
 import { errorHandler } from './middleware/error.middleware';
-import { ClientWrapper } from './service/bitcoin.client';
 import { initializeRoutes } from './controller';
 
 dotenv.config();
