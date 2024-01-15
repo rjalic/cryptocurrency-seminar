@@ -8,7 +8,8 @@ export class BitcoinService {
     }
 
     public getBlockchainInfo = async () => {
-        return await this.#client.getBlockchainInfo();
+        const blockchainInfo = await this.#client.getBlockchainInfo();
+        return { ...blockchainInfo, node: process.env.BLOCKCHAIN_HOST };
     }
 
     public getBlockByHash = async (hash: string) => {
