@@ -1,0 +1,13 @@
+### Get network info
+GET http://localhost:5000/1/bitcoin/network-info
+
+### Get block info by hash
+# height of the block used below 1230535
+GET http://localhost:5000/1/bitcoin/blocks/hash/0000000000890bd0bc1a7f9a1230e98d257dadd84f89c3aa361d96d56e9b8b3b
+
+### Get block info by height
+# hash of the block used below 0000000000890bd0bc1a7f9a1230e98d257dadd84f89c3aa361d96d56e9b8b3b
+GET http://localhost:5000/1/bitcoin/blocks/height/2572919
+
+### Get transaction info by hash
+GET http://localhost:5000/1/bitcoin/transactions/46873c3aa3bb6fb82e0ecd7799146c068f1c8a416ebd2e15174b4448c1f9f045

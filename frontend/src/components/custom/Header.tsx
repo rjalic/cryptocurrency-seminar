@@ -12,13 +12,13 @@ import { Link } from 'react-router-dom';
 import { useReducer } from 'react';
 
 interface SearchState {
-    type: 'blocks' | 'transactions' | 'addresses';
+    type: 'blocks-hash' | 'blocks-height' | 'transactions';
     query: string;
 }
 
 export function Header() {
     const [search, setSearch] = useReducer((state: SearchState, newState: Partial<SearchState>) => ({ ...state, ...newState }), {
-        type: 'blocks',
+        type: 'blocks-hash',
         query: '',
     });
 
@@ -45,19 +45,19 @@ export function Header() {
                         <DropdownMenuContent align="end" className="w-[200px]">
                             <DropdownMenuRadioGroup value={search.type}>
                                 <DropdownMenuRadioItem
-                                    onClick={() => setSearch({ type: 'blocks' })}
-                                    value="blocks">
-                                    Blocks
+                                    onClick={() => setSearch({ type: 'blocks-hash' })}
+                                    value="blocks-hash">
+                                    Blocks (by hash)
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem
+                                    onClick={() => setSearch({ type: 'blocks-height' })}
+                                    value="blocks-height">
+                                    Blocks (by height)
                                 </DropdownMenuRadioItem>
                                 <DropdownMenuRadioItem
                                     onClick={() => setSearch({ type: 'transactions' })}
                                     value="transactions">
                                     Transactions
-                                </DropdownMenuRadioItem>
-                                <DropdownMenuRadioItem
-                                    onClick={() => setSearch({ type: 'addresses' })}
-                                    value="addresses">
-                                    Addresses
                                 </DropdownMenuRadioItem>
                             </DropdownMenuRadioGroup>
                         </DropdownMenuContent>
