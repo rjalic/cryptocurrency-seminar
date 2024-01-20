@@ -53,10 +53,16 @@ export function LatestInfo() {
             <div className="grid gap-1 w-full">
                 <Tabs defaultValue={info.type}>
                     <TabsList>
-                        <TabsTrigger value="blocks" onClick={() => handleTabChange('blocks')}>Latest
-                            Blocks</TabsTrigger>
-                        <TabsTrigger value="transactions" onClick={() => handleTabChange('transactions')}>Latest
-                            Transactions</TabsTrigger>
+                        <TabsTrigger
+                            value="blocks"
+                            onClick={() => handleTabChange('blocks')}>
+                            Latest Blocks
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="transactions"
+                            onClick={() => handleTabChange('transactions')}>
+                            Latest Transactions
+                        </TabsTrigger>
                     </TabsList>
                     {info.type === 'blocks' ? <LatestBlocks data={info.data} /> : <LatestTransactions data={info.data} />}
                 </Tabs>

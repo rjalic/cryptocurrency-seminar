@@ -38,7 +38,7 @@ export function LatestTransactions({ data }: Props) {
                 </TableHeader>
                 <TableBody>
                     {data.map((tx) =>
-                        <TableRow key={tx.txid}>
+                        <TableRow key={tx.txId}>
                             <TableCell className="font-medium">{shortenHash(tx.txId)}</TableCell>
                             <TableCell className="font-medium">{shortenHash(tx.blockHash)}</TableCell>
                             <TableCell>{tx.vins}</TableCell>

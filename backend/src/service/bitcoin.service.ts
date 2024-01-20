@@ -8,8 +8,14 @@ export class BitcoinService {
     }
 
     public getBlockchainInfo = async () => {
-        const blockchainInfo = await this.#client.getBlockchainInfo();
-        return { ...blockchainInfo, node: process.env.BLOCKCHAIN_HOST };
+        const [blockchainInfo, rawMempool] = await Promise.all([await this.#client.getBlockchainInfo(), await this.#client.getRawMempool()]);
+        return {
+            node: process.env.BLOCKCHAIN_HOST,
+            chain: blockchainInfo.chain,
+            blocks: blockchainInfo.blocks,
+            headers: blockchainInfo.headers,
+            mempoolSize: rawMempool.length,
+        };
     };
 
     public getLatestBlocks = async () => {
