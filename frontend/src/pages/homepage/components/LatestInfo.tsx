@@ -1,66 +1,51 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.tsx';
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table.tsx';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs.tsx';
+import { useEffect, useState } from 'react';
+import { LatestTransactions } from '@/pages/homepage/components/LatestTransactions.tsx';
+import { LatestBlocks } from '@/pages/homepage/components/LatestBlocks.tsx';
+
+type ActiveTabOption = 'blocks' | 'transactions';
+type LatestBlockResponse = {
+    height: number;
+    hash: string;
+    timestamp: number;
+    txs: number;
+    size: number;
+    totalOuts: number;
+    totalFees: number;
+};
+type LatestInfoTab = {
+    type: ActiveTabOption;
+    data: LatestBlockResponse[];
+}
+
+export async function latestInfoLoader(activeTab: ActiveTabOption) {
+    const response = await fetch(`http://localhost:5000/1/bitcoin/${activeTab}/latest`);
+    return await response.json();
+}
 
 export function LatestInfo() {
+    const [info, setInfo] = useState<LatestInfoTab>({ type: 'blocks', data: [] });
+
+    async function handleTabChange(tab: ActiveTabOption) {
+        const data = await latestInfoLoader(tab);
+        setInfo({ type: tab, data });
+    }
+
+    useEffect(function initialLoad() {
+        handleTabChange('blocks');
+    }, []);
+
     return (
         <div className="flex flex-col gap-4 items-start py-2">
-            <div className="grid gap-1">
-                <Tabs defaultValue="blocks">
+            <div className="grid gap-1 w-full">
+                <Tabs defaultValue={info.type}>
                     <TabsList>
-                        <TabsTrigger value="blocks">Latest Blocks</TabsTrigger>
-                        <TabsTrigger value="transactions">Latest Transactions</TabsTrigger>
+                        <TabsTrigger value="blocks" onClick={() => handleTabChange('blocks')}>Latest
+                            Blocks</TabsTrigger>
+                        <TabsTrigger value="transactions" onClick={() => handleTabChange('transactions')}>Latest
+                            Transactions</TabsTrigger>
                     </TabsList>
-                    <TabsContent value="blocks">
-                        <Table>
-                            <TableCaption>A list of latest blocks.</TableCaption>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Height</TableHead>
-                                    <TableHead>Age</TableHead>
-                                    <TableHead>Transactions</TableHead>
-                                    <TableHead>Total Sent</TableHead>
-                                    <TableHead>Block Size (in bytes)</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {Array.from({ length: 10 }, (_, i) => i + 1).map((_) =>
-                                    <TableRow>
-                                        <TableCell className="font-medium">2572921</TableCell>
-                                        <TableCell>2024-01-15T09:18:40.204Z</TableCell>
-                                        <TableCell>501</TableCell>
-                                        <TableCell>1,405.385 BTC</TableCell>
-                                        <TableCell>184,122</TableCell>
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </TabsContent>
-                    <TabsContent value="transactions">
-                        <Table>
-                            <TableCaption>A list of latest transactions.</TableCaption>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Transaction Hash</TableHead>
-                                    <TableHead>Amount</TableHead>
-                                    <TableHead>Size (in bytes)</TableHead>
-                                    <TableHead>Number of inputs</TableHead>
-                                    <TableHead>Number of outputs</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {Array.from({ length: 10 }, (_, i) => i + 1).map((_) =>
-                                    <TableRow>
-                                        <TableCell
-                                            className="font-medium">46873c3aa3bb6fb82e0ecd7799146c068f1c8a416ebd2e15174b4448c1f9f045</TableCell>
-                                        <TableCell>0.01000302 BTC</TableCell>
-                                        <TableCell>563</TableCell>
-                                        <TableCell>2</TableCell>
-                                        <TableCell>6</TableCell>
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </TabsContent>
+                    {info.type === 'blocks' ? <LatestBlocks data={info.data} /> : <LatestTransactions />}
                 </Tabs>
             </div>
         </div>

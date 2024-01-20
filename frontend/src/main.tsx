@@ -5,11 +5,18 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Homepage, loader } from '@/pages/homepage/Homepage.tsx';
 import { Transaction } from '@/pages/transaction/Transaction.tsx';
 import { PageLayout } from '@/pages/PageLayout.tsx';
+import { LatestInfo } from '@/pages/homepage/components/LatestInfo.tsx';
 
 const router = createBrowserRouter([
     {
         element: <PageLayout />, children: [
-            { path: '/', element: <Homepage />, loader: loader },
+            {
+                path: '/', element: <Homepage />, loader: loader, children: [
+                    {
+                        path: '/', element: <LatestInfo />
+                    },
+                ],
+            },
             { path: '/transactions/:txid', element: <Transaction /> },
         ],
     },

@@ -12,6 +12,23 @@ export class BitcoinService {
         return { ...blockchainInfo, node: process.env.BLOCKCHAIN_HOST };
     }
 
+    public getLatestBlocks = async () => {
+        const latestBlockHeight = await this.#client.getBlockCount();
+        const arrayOfLength10 = Array.from({ length: 10 }, (_, i) => i + 1);
+        const latestBlockResponses = await Promise.all(arrayOfLength10.map(async (i) => await this.#client.getBlockStats(latestBlockHeight - i)));
+        return latestBlockResponses.map((block) => {
+            return {
+                height: block.height,
+                hash: block.blockhash,
+                timestamp: block.time,
+                txs: block.txs,
+                size: block.total_size,
+                totalOuts: Number(`${block.total_out}e-8`),
+                totalFees: Number(`${block.totalfee}e-8`),
+            };
+        });
+    }
+
     public getBlockByHash = async (hash: string) => {
         return await this.#client.getBlock(hash);
     }
@@ -30,6 +47,13 @@ export class BitcoinService {
         const decodedTx = await this.#client.decodeRawTransaction(rawTx.hex);
         const fee = await this.calculateTransactionFee(decodedTx);
         return { ...decodedTx, fee, blockhash: rawTx.blockhash, confirmations: rawTx.confirmations };
+    }
+
+    public getLatestTransactions = async () => {
+        const latestBlockHash = await this.#client.getBlockCount();
+        const latestBlock = await this.#client.getBlockByHash(await this.#client.getBlockHash(latestBlockHash));
+        const latestTransactions = await Promise.all(latestBlock.tx.map(async (txId) => await this.getTransactionById(txId)));
+        return latestTransactions;
     }
 
     private calculateTransactionFee = async (transaction) => {
