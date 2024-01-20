@@ -48,6 +48,13 @@ export function LatestInfo() {
         handleTabChange('blocks');
     }, []);
 
+    useEffect(function periodicUpdate() {
+        const interval = setInterval(() => {
+            handleTabChange(info.type);
+        }, 10_000);
+        return () => clearInterval(interval);
+    }, [info.type]);
+
     return (
         <div className="flex flex-col gap-4 items-start py-2">
             <div className="grid gap-1 w-full">

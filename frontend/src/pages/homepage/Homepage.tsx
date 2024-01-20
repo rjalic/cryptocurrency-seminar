@@ -1,5 +1,6 @@
 import { NetworkInfo } from '@/pages/homepage/components/NetworkInfo.tsx';
-import { Outlet, useLoaderData } from 'react-router-dom';
+import { Outlet, useLoaderData, useRevalidator } from 'react-router-dom';
+import { useEffect } from 'react';
 
 type NetworkInfoResponse = {
     node: string;
@@ -15,6 +16,14 @@ export async function loader() {
 
 export function Homepage() {
     const data = useLoaderData() as NetworkInfoResponse;
+    const revalidator = useRevalidator();
+
+    useEffect(function periodicUpdate() {
+        const interval = setInterval(() => {
+            revalidator.revalidate();
+        }, 10_000);
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <>
