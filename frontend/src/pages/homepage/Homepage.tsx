@@ -10,7 +10,7 @@ type NetworkInfoResponse = {
     mempoolSize: number;
 }
 
-export async function loader() {
+export async function networkInfoLoader() {
     return await fetch('http://localhost:5000/1/bitcoin/network-info');
 }
 

@@ -20,8 +20,9 @@ type LatestTransactionResponse = {
     size: number;
     vins: number;
     vouts: number;
+    totalIn: number;
     totalOut: number;
-    totalFee: number;
+    fee: number;
 };
 type LatestInfoTab = {
     type: 'blocks';

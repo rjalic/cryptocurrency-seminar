@@ -8,12 +8,23 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu.tsx';
 import { Button } from '@/components/ui/button.tsx';
-import { Link } from 'react-router-dom';
+import { Form, Link } from 'react-router-dom';
 import { useReducer } from 'react';
 
 interface SearchState {
     type: 'blocks-hash' | 'blocks-height' | 'transactions';
     query: string;
+}
+
+export function searchAction(state: SearchState) {
+    switch (state.type) {
+        case 'blocks-hash':
+            return `/blocks/${state.query}`;
+        case 'blocks-height':
+            return `/blocks/${state.query}`;
+        case 'transactions':
+            return `/transactions/${state.query}`;
+    }
 }
 
 export function Header() {
@@ -28,7 +39,7 @@ export function Header() {
                 <Bitcoin className="p-1 w-7 h-7 bg-[#f7931a] text-white rounded-full" />
                 <span className="whitespace-nowrap">Bitcoin Testnet Explorer</span>
             </Link>
-            <form className="flex items-center w-full gap-4 md:ml-auto md:gap-2 lg:gap-4 mx-auto">
+            <Form className="flex items-center w-full gap-4 md:ml-auto md:gap-2 lg:gap-4 mx-auto" method="GET" action={searchAction(search)}>
                 <div className="relative flex-1 ml-auto sm:flex-initial flex items-center gap-2">
                     <Input className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
                            placeholder="Search..."
@@ -64,7 +75,7 @@ export function Header() {
                     </DropdownMenu>
                 </div>
                 <Button type="submit">Search</Button>
-            </form>
+            </Form>
         </header>
     );
 }

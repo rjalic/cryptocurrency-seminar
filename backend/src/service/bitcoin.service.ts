@@ -49,10 +49,35 @@ export class BitcoinService {
     };
 
     public getTransactionById = async (hash: string) => {
-        const rawTx = await this.#client.getRawTransaction(hash, 2);
+        const rawTx = await this.#client.getRawTransaction(hash, 3);
+        console.log(rawTx);
         const decodedTx = await this.#client.decodeRawTransaction(rawTx.hex);
-        return { ...decodedTx, fee: rawTx.fee, blockhash: rawTx.blockhash, confirmations: rawTx.confirmations };
+        return {
+            txId: decodedTx.txid,
+            blockHash: rawTx.blockhash,
+            confirmations: rawTx.confirmations,
+            size: decodedTx.size,
+            vSize: decodedTx.vsize,
+            fee: rawTx.fee,
+            vins: this.getVins(rawTx.vin),
+            vouts: this.getVouts(rawTx.vout),
+            version: decodedTx.version,
+        };
     };
+
+    private getVins = (vins) => {
+        return vins.map(vin => ({
+            address: vin.prevout.scriptPubKey.address,
+            amount: vin.prevout.value,
+        }));
+    }
+
+    private getVouts = (vouts) => {
+        return vouts.map(vout => ({
+            address: vout.scriptPubKey.address ?? 'Null Data Transaction',
+            amount: vout.value,
+        }));
+    }
 
     public getLatestTransactions = async () => {
         const latestBlockHeight = await this.#client.getBlockCount();
@@ -61,20 +86,26 @@ export class BitcoinService {
         const latestTransactions = await Promise.all(last10TxIds.map(async (txId) => await this.getTransactionById(txId)));
         return latestTransactions.map((tx) => {
             return {
-                txId: tx.txid,
-                blockHash: tx.blockhash,
+                txId: tx.txId,
+                blockHash: tx.blockHash,
                 confirmations: tx.confirmations,
                 size: tx.size,
-                vins: tx.vin.length,
-                vouts: tx.vout.length,
+                vins: tx.vins.length,
+                vouts: tx.vouts.length,
+                totalIn: this.calculateTotalIn(tx),
                 totalOut: this.calculateTotalOut(tx),
-                totalFee: tx.fee,
+                fee: tx.fee,
             };
         });
     };
 
+    private calculateTotalIn = (transaction) => {
+        const result = transaction.vins.reduce((acc, vout) => acc + vout.amount, 0);
+        return +result.toFixed(8);
+    };
+
     private calculateTotalOut = (transaction) => {
-        const result = transaction.vout.map(vout => vout.value ? +vout.value : 0).reduce((acc, amount) => acc + amount, 0);
+        const result = transaction.vouts.reduce((acc, vout) => acc + vout.amount, 0);
         return +result.toFixed(8);
     };
 }

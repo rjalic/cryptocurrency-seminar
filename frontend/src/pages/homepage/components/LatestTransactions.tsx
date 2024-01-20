@@ -12,8 +12,9 @@ type LatestTransactionResponse = {
     size: number;
     vins: number;
     vouts: number;
+    totalIn: number;
     totalOut: number;
-    totalFee: number;
+    fee: number;
 };
 
 interface Props {
@@ -32,8 +33,9 @@ export function LatestTransactions({ data }: Props) {
                         <TableHead>Number of Inputs</TableHead>
                         <TableHead>Number of Outputs</TableHead>
                         <TableHead>Size (in bytes)</TableHead>
+                        <TableHead>Total In</TableHead>
                         <TableHead>Total Out</TableHead>
-                        <TableHead>Total Fees</TableHead>
+                        <TableHead>Fee</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -44,8 +46,9 @@ export function LatestTransactions({ data }: Props) {
                             <TableCell>{tx.vins}</TableCell>
                             <TableCell>{tx.vouts}</TableCell>
                             <TableCell>{tx.size}</TableCell>
-                            <TableCell>{tx.totalOut} BTC</TableCell>
-                            <TableCell>{tx.totalFee} BTC</TableCell>
+                            <TableCell>{tx.totalIn.toFixed(8)} BTC</TableCell>
+                            <TableCell>{tx.totalOut.toFixed(8)} BTC</TableCell>
+                            <TableCell>{tx.fee.toFixed(8)} BTC</TableCell>
                         </TableRow>,
                     )}
                 </TableBody>
