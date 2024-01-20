@@ -13,10 +13,23 @@ type LatestBlockResponse = {
     totalOuts: number;
     totalFees: number;
 };
+type LatestTransactionResponse = {
+    txId: string;
+    blockHash: string;
+    confirmations: number;
+    size: number;
+    vins: number;
+    vouts: number;
+    totalOut: number;
+    totalFee: number;
+};
 type LatestInfoTab = {
-    type: ActiveTabOption;
+    type: 'blocks';
     data: LatestBlockResponse[];
-}
+} | {
+    type: 'transactions';
+    data: LatestTransactionResponse[];
+};
 
 export async function latestInfoLoader(activeTab: ActiveTabOption) {
     const response = await fetch(`http://localhost:5000/1/bitcoin/${activeTab}/latest`);
@@ -45,7 +58,7 @@ export function LatestInfo() {
                         <TabsTrigger value="transactions" onClick={() => handleTabChange('transactions')}>Latest
                             Transactions</TabsTrigger>
                     </TabsList>
-                    {info.type === 'blocks' ? <LatestBlocks data={info.data} /> : <LatestTransactions />}
+                    {info.type === 'blocks' ? <LatestBlocks data={info.data} /> : <LatestTransactions data={info.data} />}
                 </Tabs>
             </div>
         </div>

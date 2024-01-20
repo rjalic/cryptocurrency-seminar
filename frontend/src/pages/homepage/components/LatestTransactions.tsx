@@ -1,7 +1,26 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table.tsx';
 import { TabsContent } from '@/components/ui/tabs.tsx';
 
-export function LatestTransactions() {
+function shortenHash(hash: string) {
+    return `${hash.slice(0, 4)}...${hash.slice(-10)}`;
+}
+
+type LatestTransactionResponse = {
+    txId: string;
+    blockHash: string;
+    confirmations: number;
+    size: number;
+    vins: number;
+    vouts: number;
+    totalOut: number;
+    totalFee: number;
+};
+
+interface Props {
+    data: LatestTransactionResponse[];
+}
+
+export function LatestTransactions({ data }: Props) {
     return (
         <TabsContent value="transactions">
             <Table>
@@ -9,21 +28,24 @@ export function LatestTransactions() {
                 <TableHeader>
                     <TableRow>
                         <TableHead>Transaction Hash</TableHead>
-                        <TableHead>Amount</TableHead>
+                        <TableHead>Block Hash</TableHead>
+                        <TableHead>Number of Inputs</TableHead>
+                        <TableHead>Number of Outputs</TableHead>
                         <TableHead>Size (in bytes)</TableHead>
-                        <TableHead>Number of inputs</TableHead>
-                        <TableHead>Number of outputs</TableHead>
+                        <TableHead>Total Out</TableHead>
+                        <TableHead>Total Fees</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {Array.from({ length: 10 }, (_, i) => i + 1).map((_) =>
-                        <TableRow>
-                            <TableCell
-                                className="font-medium">46873c3aa3bb6fb82e0ecd7799146c068f1c8a416ebd2e15174b4448c1f9f045</TableCell>
-                            <TableCell>0.01000302 BTC</TableCell>
-                            <TableCell>563</TableCell>
-                            <TableCell>2</TableCell>
-                            <TableCell>6</TableCell>
+                    {data.map((tx) =>
+                        <TableRow key={tx.txid}>
+                            <TableCell className="font-medium">{shortenHash(tx.txId)}</TableCell>
+                            <TableCell className="font-medium">{shortenHash(tx.blockHash)}</TableCell>
+                            <TableCell>{tx.vins}</TableCell>
+                            <TableCell>{tx.vouts}</TableCell>
+                            <TableCell>{tx.size}</TableCell>
+                            <TableCell>{tx.totalOut} BTC</TableCell>
+                            <TableCell>{tx.totalFee} BTC</TableCell>
                         </TableRow>,
                     )}
                 </TableBody>

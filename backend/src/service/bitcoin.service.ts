@@ -10,12 +10,12 @@ export class BitcoinService {
     public getBlockchainInfo = async () => {
         const blockchainInfo = await this.#client.getBlockchainInfo();
         return { ...blockchainInfo, node: process.env.BLOCKCHAIN_HOST };
-    }
+    };
 
     public getLatestBlocks = async () => {
         const latestBlockHeight = await this.#client.getBlockCount();
         const arrayOfLength10 = Array.from({ length: 10 }, (_, i) => i + 1);
-        const latestBlockResponses = await Promise.all(arrayOfLength10.map(async (i) => await this.#client.getBlockStats(latestBlockHeight - i)));
+        const latestBlockResponses = await Promise.all(arrayOfLength10.map(async (i) => await this.#client.getBlockStats(latestBlockHeight + 1 - i)));
         return latestBlockResponses.map((block) => {
             return {
                 height: block.height,
@@ -27,49 +27,49 @@ export class BitcoinService {
                 totalFees: Number(`${block.totalfee}e-8`),
             };
         });
-    }
+    };
 
     public getBlockByHash = async (hash: string) => {
         return await this.#client.getBlock(hash);
-    }
+    };
 
     public getBlockHashByHeight = async (height: number) => {
         return await this.#client.getBlockHash(height);
-    }
+    };
 
     public getBlockByHeight = async (height: number) => {
         const hash = await this.getBlockHashByHeight(height);
         return await this.getBlockByHash(hash);
-    }
+    };
 
     public getTransactionById = async (hash: string) => {
-        const rawTx = await this.#client.getRawTransaction(hash, true);
+        const rawTx = await this.#client.getRawTransaction(hash, 2);
         const decodedTx = await this.#client.decodeRawTransaction(rawTx.hex);
-        const fee = await this.calculateTransactionFee(decodedTx);
-        return { ...decodedTx, fee, blockhash: rawTx.blockhash, confirmations: rawTx.confirmations };
-    }
+        return { ...decodedTx, fee: rawTx.fee, blockhash: rawTx.blockhash, confirmations: rawTx.confirmations };
+    };
 
     public getLatestTransactions = async () => {
-        const latestBlockHash = await this.#client.getBlockCount();
-        const latestBlock = await this.#client.getBlockByHash(await this.#client.getBlockHash(latestBlockHash));
-        const latestTransactions = await Promise.all(latestBlock.tx.map(async (txId) => await this.getTransactionById(txId)));
-        return latestTransactions;
-    }
+        const latestBlockHeight = await this.#client.getBlockCount();
+        const latestBlock = await this.getBlockByHeight(latestBlockHeight);
+        const last10TxIds = latestBlock.tx.slice(-10).reverse();
+        const latestTransactions = await Promise.all(last10TxIds.map(async (txId) => await this.getTransactionById(txId)));
+        return latestTransactions.map((tx) => {
+            return {
+                txId: tx.txid,
+                blockHash: tx.blockhash,
+                confirmations: tx.confirmations,
+                size: tx.size,
+                vins: tx.vin.length,
+                vouts: tx.vout.length,
+                totalOut: this.calculateTotalOut(tx),
+                totalFee: tx.fee,
+            };
+        });
+    };
 
-    private calculateTransactionFee = async (transaction) => {
-        const voutSum = transaction.vout.map(vout => vout.value ?? 0).reduce((acc, amount) => acc + amount, 0);
-
-        const inputTxs = await Promise.all(transaction.vin.map(async (v) => await this.getTxValue(v.txid)));
-        const vinSum = inputTxs.reduce((prev, next) => prev + next, 0);
-
-        return vinSum - voutSum;
-    }
-
-    private getTxValue = async (txId: string) => {
-        const inputTransactionRaw = await this.#client.getRawTransaction(txId);
-        const inputTransactionDecoded = await this.#client.decodeRawTransaction(inputTransactionRaw);
-        const vOutSum = inputTransactionDecoded.vout.map(v => v.value ?? 0).reduce((acc, next) => acc + next, 0);
-        return vOutSum;
-    }
+    private calculateTotalOut = (transaction) => {
+        const result = transaction.vout.map(vout => vout.value ? +vout.value : 0).reduce((acc, amount) => acc + amount, 0);
+        return +result.toFixed(8);
+    };
 }
 

@@ -37,7 +37,7 @@ export function LatestBlocks({ data }: Props) {
                 </TableHeader>
                 <TableBody>
                     {data.map((block) =>
-                        <TableRow>
+                        <TableRow key={block.height}>
                             <TableCell className="font-medium">{block.height}</TableCell>
                             <TableCell
                                 className="font-medium truncate">{shortenHash(block.hash)}</TableCell>
