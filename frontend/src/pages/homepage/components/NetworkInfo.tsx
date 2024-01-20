@@ -19,7 +19,7 @@ export function NetworkInfo({ data }: Props) {
                 <Separator className="h-5" orientation="vertical" />
                 <div className="text-gray-500 flex items-center gap-2 dark:text-gray-400">
                             <span
-                                className="inline-block w-2 h-2 bg-[#09CE6B] rounded-full animate-ping duration-[5000]" />
+                                className="inline-block w-2 h-2 bg-[#09CE6B] rounded-full animate-ping duration-5000" />
                     32 transactions in mempool
                 </div>
             </div>
