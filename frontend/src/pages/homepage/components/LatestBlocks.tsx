@@ -11,7 +11,7 @@ type LatestBlockResponse = {
     timestamp: number;
     txs: number;
     size: number;
-    totalOuts: number;
+    totalOut: number;
     totalFees: number;
 };
 
@@ -28,7 +28,7 @@ export function LatestBlocks({ data }: Props) {
                     <TableRow>
                         <TableHead>Height</TableHead>
                         <TableHead>Hash</TableHead>
-                        <TableHead>Age</TableHead>
+                        <TableHead>Block Time</TableHead>
                         <TableHead>Transactions</TableHead>
                         <TableHead>Block Size (in bytes)</TableHead>
                         <TableHead>Total Out</TableHead>
@@ -41,10 +41,10 @@ export function LatestBlocks({ data }: Props) {
                             <TableCell className="font-medium">{block.height}</TableCell>
                             <TableCell
                                 className="font-medium truncate">{shortenHash(block.hash)}</TableCell>
-                            <TableCell>{new Date(block.timestamp * 1000).toLocaleString()}</TableCell>
+                            <TableCell>{new Date(block.timestamp * 1_000).toLocaleString()}</TableCell>
                             <TableCell>{block.txs}</TableCell>
                             <TableCell>{block.size}</TableCell>
-                            <TableCell>{block.totalOuts} BTC</TableCell>
+                            <TableCell>{block.totalOut} BTC</TableCell>
                             <TableCell>{block.totalFees} BTC</TableCell>
                         </TableRow>,
                     )}

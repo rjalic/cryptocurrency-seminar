@@ -10,7 +10,7 @@ type LatestBlockResponse = {
     timestamp: number;
     txs: number;
     size: number;
-    totalOuts: number;
+    totalOut: number;
     totalFees: number;
 };
 type LatestTransactionResponse = {

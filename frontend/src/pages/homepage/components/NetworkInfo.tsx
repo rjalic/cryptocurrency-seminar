@@ -14,7 +14,9 @@ export function NetworkInfo({ node, chain, blocks, headers, mempoolSize }: Props
     return (
         <div className="max-w-6xl w-full mx-auto grid gap-2">
             <h1 className="font-semibold text-3xl">
-                Network Info <TooltipWrapper trigger={<Info size={20} />} content={'Info is updated periodically.'} />
+                Network Info <TooltipWrapper content={'Info is updated periodically.'}>
+                <Info size={20} />
+            </TooltipWrapper>
             </h1>
             <div className="flex items-center text-md gap-2">
                 Connected to node: <span className="font-medium">{node}</span>

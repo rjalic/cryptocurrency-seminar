@@ -19,9 +19,9 @@ interface SearchState {
 export function searchAction(state: SearchState) {
     switch (state.type) {
         case 'blocks-hash':
-            return `/blocks/${state.query}`;
+            return `/blocks/hash/${state.query}`;
         case 'blocks-height':
-            return `/blocks/${state.query}`;
+            return `/blocks/height/${state.query}`;
         case 'transactions':
             return `/transactions/${state.query}`;
     }

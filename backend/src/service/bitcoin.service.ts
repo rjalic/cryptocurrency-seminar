@@ -29,17 +29,34 @@ export class BitcoinService {
                 timestamp: block.time,
                 txs: block.txs,
                 size: block.total_size,
-                totalOuts: Number(`${block.total_out}e-8`),
+                totalOut: Number(`${block.total_out}e-8`),
                 totalFees: Number(`${block.totalfee}e-8`),
             };
         });
     };
 
     public getBlockByHash = async (hash: string) => {
-        return await this.#client.getBlock(hash);
+        const [blockInfo, blockStats] = await Promise.all([await this.#client.getBlock(hash), await this.#client.getBlockStats(hash)]);
+        return {
+            height: blockInfo.height,
+            hash: blockInfo.hash,
+            timestamp: blockInfo.time,
+            size: blockInfo.size,
+            confirmations: blockInfo.confirmations,
+            minFee: Number(`${blockStats.minfee}e-8`),
+            avgFee: Number(`${blockStats.avgfee}e-8`),
+            maxFee: Number(`${blockStats.maxfee}e-8`),
+            totalFees: Number(`${blockStats.totalfee}e-8`),
+            ins: blockStats.ins,
+            outs: blockStats.outs,
+            totalOut: Number(`${blockStats.total_out}e-8`),
+            previousBlockHash: blockInfo.previousblockhash,
+            nextBlockHash: blockInfo.nextblockhash,
+            txs: blockInfo.tx,
+        };
     };
 
-    public getBlockHashByHeight = async (height: number) => {
+    private getBlockHashByHeight = async (height: number) => {
         return await this.#client.getBlockHash(height);
     };
 
@@ -50,7 +67,6 @@ export class BitcoinService {
 
     public getTransactionById = async (hash: string) => {
         const rawTx = await this.#client.getRawTransaction(hash, 3);
-        console.log(rawTx);
         const decodedTx = await this.#client.decodeRawTransaction(rawTx.hex);
         return {
             txId: decodedTx.txid,
@@ -82,7 +98,7 @@ export class BitcoinService {
     public getLatestTransactions = async () => {
         const latestBlockHeight = await this.#client.getBlockCount();
         const latestBlock = await this.getBlockByHeight(latestBlockHeight);
-        const last10TxIds = latestBlock.tx.slice(-10).reverse();
+        const last10TxIds = latestBlock.txs.slice(-10).reverse();
         const latestTransactions = await Promise.all(last10TxIds.map(async (txId) => await this.getTransactionById(txId)));
         return latestTransactions.map((tx) => {
             return {

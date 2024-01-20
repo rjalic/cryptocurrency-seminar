@@ -2,15 +2,15 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { ReactNode } from 'react';
 
 interface Props {
-    trigger: ReactNode;
     content: ReactNode;
+    children: ReactNode;
 }
 
-export function TooltipWrapper({ trigger, content }: Props) {
+export function TooltipWrapper({ children, content }: Props) {
     return (
-        <TooltipProvider>
+        <TooltipProvider delayDuration={500}>
             <Tooltip>
-                <TooltipTrigger>{trigger}</TooltipTrigger>
+                <TooltipTrigger>{children}</TooltipTrigger>
                 <TooltipContent>
                     {content}
                 </TooltipContent>

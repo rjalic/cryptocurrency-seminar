@@ -10,10 +10,10 @@ GET http://localhost:5000/1/bitcoin/blocks/hash/0000000000890bd0bc1a7f9a1230e98d
 
 ### Get block info by height
 # hash of the block used below 0000000000890bd0bc1a7f9a1230e98d257dadd84f89c3aa361d96d56e9b8b3b
-GET http://localhost:5000/1/bitcoin/blocks/height/2572919
+GET http://localhost:5000/1/bitcoin/blocks/height/1230535
 
 ### Get latest transaction info
 GET http://localhost:5000/1/bitcoin/transactions/latest
 
 ### Get transaction info by hash
-GET http://localhost:5000/1/bitcoin/transactions/46873c3aa3bb6fb82e0ecd7799146c068f1c8a416ebd2e15174b4448c1f9f045
+GET http://localhost:5000/1/bitcoin/transactions/e6aa13ab60c527100bf22634160ed026efa2370e68e974c9611afb301fe3cd0b

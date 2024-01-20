@@ -62,7 +62,9 @@ export function TransactionInOut({ vins, vouts }: Props) {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         href="https://btcinformation.org/en/glossary/null-data-transaction">
-                                        <TooltipWrapper trigger={<HelpCircle size={16} />} content={'Click to find out more'} />
+                                        <TooltipWrapper content={'Click to find out more'}>
+                                            <HelpCircle size={16} />
+                                        </TooltipWrapper>
                                     </a>
                                     : null}
                                 </div>
