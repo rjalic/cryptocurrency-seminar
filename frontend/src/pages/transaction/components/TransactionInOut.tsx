@@ -14,6 +14,10 @@ interface Props {
     }[];
 }
 
+function shortenHash(hash: string) {
+    return `${hash.slice(0, 4)}...${hash.slice(-10)}`;
+}
+
 export function TransactionInOut({ vins, vouts }: Props) {
     return (
         <div className="grid gap-6 lg:grid-cols-2">
@@ -29,7 +33,11 @@ export function TransactionInOut({ vins, vouts }: Props) {
                         <div className="grid gap-4" key={`${vin.address}-${vin.amount}-${idx}`}>
                             <div className="flex items-center">
                                 <div>Source Address</div>
-                                <div className="font-semibold ml-auto">{vin.address}</div>
+                                <div className="font-semibold ml-auto">
+                                    <TooltipWrapper content={vin.address}>
+                                        {shortenHash(vin.address)}
+                                    </TooltipWrapper>
+                                </div>
                             </div>
                             <div className="flex items-center">
                                 <div>Amount:</div>
@@ -57,16 +65,19 @@ export function TransactionInOut({ vins, vouts }: Props) {
                             <div className="flex items-center">
                                 <div>Target Address:</div>
                                 <div
-                                    className="font-semibold ml-auto">{vout.address} {vout.address === 'Null Data Transaction' ?
-                                    <a
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        href="https://btcinformation.org/en/glossary/null-data-transaction">
-                                        <TooltipWrapper content={'Click to find out more'}>
-                                            <HelpCircle size={16} />
-                                        </TooltipWrapper>
-                                    </a>
-                                    : null}
+                                    className="font-semibold ml-auto">
+                                    <TooltipWrapper content={vout.address}>
+                                        {vout.address !== 'Null Data Transaction' ? shortenHash(vout.address) : vout.address} {vout.address === 'Null Data Transaction' ?
+                                        <a
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            href="https://btcinformation.org/en/glossary/null-data-transaction">
+                                            <TooltipWrapper content={'Click to find out more'}>
+                                                <HelpCircle size={16} />
+                                            </TooltipWrapper>
+                                        </a>
+                                        : null}
+                                    </TooltipWrapper>
                                 </div>
                             </div>
                             <div className="flex items-center">
