@@ -26,7 +26,7 @@ export function TransactionInOut({ vins, vouts }: Props) {
                 </CardHeader>
                 <CardContent className="grid gap-4 text-sm p-6">
                     {vins.map((vin, idx) =>
-                        <div className="grid gap-4" key={vin.address}>
+                        <div className="grid gap-4" key={`${vin.address}-${vin.amount}-${idx}`}>
                             <div className="flex items-center">
                                 <div>Source Address</div>
                                 <div className="font-semibold ml-auto">{vin.address}</div>
@@ -53,7 +53,7 @@ export function TransactionInOut({ vins, vouts }: Props) {
                 </CardHeader>
                 <CardContent className="grid gap-4 text-sm p-6">
                     {vouts.map((vout, idx) =>
-                        <div className="grid gap-4" key={vout.address}>
+                        <div className="grid gap-4" key={`${vout.address}-${vout.amount}-${idx}`}>
                             <div className="flex items-center">
                                 <div>Target Address:</div>
                                 <div

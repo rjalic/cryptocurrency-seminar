@@ -1,5 +1,7 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table.tsx';
 import { TabsContent } from '@/components/ui/tabs.tsx';
+import { Link } from 'react-router-dom';
+import { TooltipWrapper } from '@/components/custom/TooltipWrapper.tsx';
 
 function shortenHash(hash: string) {
     return `${hash.slice(0, 4)}...${hash.slice(-10)}`;
@@ -38,9 +40,16 @@ export function LatestBlocks({ data }: Props) {
                 <TableBody>
                     {data.map((block) =>
                         <TableRow key={block.height}>
-                            <TableCell className="font-medium">{block.height}</TableCell>
-                            <TableCell
-                                className="font-medium truncate">{shortenHash(block.hash)}</TableCell>
+                            <TableCell className="font-medium">
+                                <Link to={`/blocks/height/${block.height}`}>{block.height}</Link>
+                            </TableCell>
+                            <TableCell className="font-medium truncate">
+                                <TooltipWrapper content={block.hash}>
+                                    <Link to={`/blocks/hash/${block.hash}`}>
+                                        {shortenHash(block.hash)}
+                                    </Link>
+                                </TooltipWrapper>
+                            </TableCell>
                             <TableCell>{new Date(block.timestamp * 1_000).toLocaleString()}</TableCell>
                             <TableCell>{block.txs}</TableCell>
                             <TableCell>{block.size}</TableCell>

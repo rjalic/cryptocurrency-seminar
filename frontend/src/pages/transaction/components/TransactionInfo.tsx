@@ -1,4 +1,5 @@
 import { Separator } from '@/components/ui/separator.tsx';
+import { Link } from 'react-router-dom';
 
 interface Props {
     txId: string;
@@ -17,7 +18,13 @@ export function TransactionInfo({ txId, blockHash, fee, confirmations, size, vSi
             <div className="flex flex-col text-md gap-2">
                 <div className="flex gap-2">Transaction ID:<span className="font-medium">{txId}</span></div>
                 <Separator />
-                <div className="flex gap-2">Block Hash:<span className="font-medium">{blockHash}</span></div>
+                <div className="flex gap-2">Block Hash:
+                    <span className="font-medium">
+                        <Link to={`/blocks/hash/${blockHash}`}>
+                            {blockHash}
+                        </Link>
+                    </span>
+                </div>
                 <Separator />
                 <div className="flex gap-2">Fee:<span className="font-medium">{fee.toFixed(8)} BTC</span></div>
                 <Separator />

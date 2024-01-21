@@ -74,7 +74,7 @@ export class BitcoinService {
             confirmations: rawTx.confirmations,
             size: decodedTx.size,
             vSize: decodedTx.vsize,
-            fee: rawTx.fee,
+            fee: rawTx?.fee ?? 0,
             vins: this.getVins(rawTx.vin),
             vouts: this.getVouts(rawTx.vout),
             version: decodedTx.version,
@@ -83,8 +83,8 @@ export class BitcoinService {
 
     private getVins = (vins) => {
         return vins.map(vin => ({
-            address: vin.prevout.scriptPubKey.address,
-            amount: vin.prevout.value,
+            address: vin.prevout?.scriptPubKey.address ?? 'Coinbase Transaction',
+            amount: vin.prevout?.value ?? 0,
         }));
     }
 

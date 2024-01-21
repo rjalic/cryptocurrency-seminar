@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs, useLoaderData, useParams } from 'react-router-dom';
+import { Link, LoaderFunctionArgs, useLoaderData, useParams } from 'react-router-dom';
 import { BlockInfo } from '@/pages/block/components/BlockInfo.tsx';
 import { ArrowLeftCircle, ArrowRightCircle } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table.tsx';
@@ -81,7 +81,11 @@ export function Block() {
                             <TableRow key={tx}>
                                 <TableCell className="font-medium"></TableCell>
                                 <TableCell className="font-medium">{idx + 1 + page}.</TableCell>
-                                <TableCell className="font-medium">{tx}</TableCell>
+                                <TableCell className="font-medium">
+                                    <Link to={`/transactions/${tx}`}>
+                                        {tx}
+                                    </Link>
+                                </TableCell>
                                 <TableCell className="font-medium"></TableCell>
                             </TableRow>,
                         )}

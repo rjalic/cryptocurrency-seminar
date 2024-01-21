@@ -1,5 +1,7 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table.tsx';
 import { TabsContent } from '@/components/ui/tabs.tsx';
+import { TooltipWrapper } from '@/components/custom/TooltipWrapper.tsx';
+import { Link } from 'react-router-dom';
 
 function shortenHash(hash: string) {
     return `${hash.slice(0, 4)}...${hash.slice(-10)}`;
@@ -41,8 +43,20 @@ export function LatestTransactions({ data }: Props) {
                 <TableBody>
                     {data.map((tx) =>
                         <TableRow key={tx.txId}>
-                            <TableCell className="font-medium">{shortenHash(tx.txId)}</TableCell>
-                            <TableCell className="font-medium">{shortenHash(tx.blockHash)}</TableCell>
+                            <TableCell className="font-medium">
+                                <TooltipWrapper content={tx.txId}>
+                                    <Link to={`/transactions/${tx.txId}`}>
+                                        {shortenHash(tx.txId)}
+                                    </Link>
+                                </TooltipWrapper>
+                            </TableCell>
+                            <TableCell className="font-medium">
+                                <TooltipWrapper content={tx.blockHash}>
+                                    <Link to={`/blocks/hash/${tx.blockHash}`}>
+                                        {shortenHash(tx.blockHash)}
+                                    </Link>
+                                </TooltipWrapper>
+                            </TableCell>
                             <TableCell>{tx.vins}</TableCell>
                             <TableCell>{tx.vouts}</TableCell>
                             <TableCell>{tx.size}</TableCell>

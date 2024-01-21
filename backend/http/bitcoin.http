@@ -16,4 +16,4 @@ GET http://localhost:5000/1/bitcoin/blocks/height/1230535
 GET http://localhost:5000/1/bitcoin/transactions/latest
 
 ### Get transaction info by hash
-GET http://localhost:5000/1/bitcoin/transactions/e6aa13ab60c527100bf22634160ed026efa2370e68e974c9611afb301fe3cd0b
+GET http://localhost:5000/1/bitcoin/transactions/867f166b884a354efaea7f160bd61e1c561f43db9a2961c9f60ae652f6a687db
