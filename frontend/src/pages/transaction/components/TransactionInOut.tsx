@@ -35,7 +35,7 @@ export function TransactionInOut({ vins, vouts }: Props) {
                                 <div>Source Address</div>
                                 <div className="font-semibold ml-auto">
                                     <TooltipWrapper content={vin.address}>
-                                        {shortenHash(vin.address)}
+                                        {vin.address !== 'Coinbase Transaction' ? shortenHash(vin.address) : vin.address}
                                     </TooltipWrapper>
                                 </div>
                             </div>

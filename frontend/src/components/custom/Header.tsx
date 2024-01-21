@@ -74,7 +74,7 @@ export function Header() {
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
-                <Button type="submit">Search</Button>
+                <Button type="submit" disabled={search.query.trim() === ''}>Search</Button>
             </Form>
         </header>
     );

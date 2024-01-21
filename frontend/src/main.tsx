@@ -7,6 +7,7 @@ import { Transaction, transactionLoader } from '@/pages/transaction/Transaction.
 import { PageLayout } from '@/pages/PageLayout.tsx';
 import { LatestInfo } from '@/pages/homepage/components/LatestInfo.tsx';
 import { Block, blockHashLoader, blockHeightLoader } from '@/pages/block/Block.tsx';
+import { NotFound } from '@/pages/NotFound.tsx';
 
 const router = createBrowserRouter([
     {
@@ -17,10 +18,11 @@ const router = createBrowserRouter([
                         path: '/', element: <LatestInfo />
                     },
                 ],
+                errorElement: <NotFound />,
             },
-            { path: '/transactions/:txid', element: <Transaction />, loader: transactionLoader },
-            { path: '/blocks/hash/:hash', element: <Block />, loader: blockHashLoader },
-            { path: '/blocks/height/:height', element: <Block />, loader: blockHeightLoader },
+            { path: '/transactions/:txid', element: <Transaction />, loader: transactionLoader, errorElement: <NotFound /> },
+            { path: '/blocks/hash/:hash', element: <Block />, loader: blockHashLoader, errorElement: <NotFound /> },
+            { path: '/blocks/height/:height', element: <Block />, loader: blockHeightLoader, errorElement: <NotFound /> },
         ],
     },
 ]);
